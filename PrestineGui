@@ -1,0 +1,211 @@
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TitleLabel = Instance.new("TextLabel")
+local TabButtonsFrame = Instance.new("Frame")
+local ToggleButton = Instance.new("ImageButton")
+local UserInputService = game:GetService("UserInputService")
+local Player = game.Players.LocalPlayer
+
+ScreenGui.Name = "Prestine"
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 400, 0, 350)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundTransparency = 0.1
+MainFrame.Parent = ScreenGui
+UICorner.Parent = MainFrame
+
+local UIStroke = Instance.new("UIStroke")
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+UIStroke.Color = Color3.fromRGB(0, 150, 255)
+UIStroke.Thickness = 3
+UIStroke.Parent = MainFrame
+
+TitleLabel.Name = "Prestine"
+TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+TitleLabel.BorderSizePixel = 0
+TitleLabel.Text = "Prestine GUI"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 26
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Parent = MainFrame
+
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = ScreenGui
+ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ToggleButton.BorderSizePixel = 0
+ToggleButton.Position = UDim2.new(0.02, 0, 0.5, -27.5)
+ToggleButton.Size = UDim2.new(0, 55, 0, 55)
+ToggleButton.Image = "http://www.roblox.com/asset/?id=98996162631897"
+
+local toggleSound = Instance.new("Sound")
+toggleSound.SoundId = "rbxassetid://9120299508"
+toggleSound.Parent = ToggleButton
+
+TabButtonsFrame.Name = "TabButtonsFrame"
+TabButtonsFrame.Size = UDim2.new(1, 0, 0, 40)
+TabButtonsFrame.Position = UDim2.new(0, 0, 0, 40)
+TabButtonsFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TabButtonsFrame.Parent = MainFrame
+
+local function createTabButton(name, position)
+    local button = Instance.new("TextButton")
+    button.Name = name .. "Button"
+    button.Size = UDim2.new(0, 100, 1, 0)
+    button.Position = position
+    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    button.BorderSizePixel = 0
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 18
+    button.Font = Enum.Font.Gotham
+    button.AutoButtonColor = false
+
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+    end)
+
+    button.MouseLeave:Connect(function()
+        if not button.Selected then
+            button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        end
+    end)
+
+    button.MouseButton1Click:Connect(function()
+        local clickSound = Instance.new("Sound")
+        clickSound.SoundId = "rbxassetid://9126016593"
+        clickSound.Parent = button
+        clickSound:Play()
+    end)
+
+    button.Parent = TabButtonsFrame
+    return button
+end
+
+local TabButtons = {}
+for i, tab in ipairs(customTabs) do
+    TabButtons[i] = createTabButton(tab.Name, UDim2.new(0, (i-1) * 100, 0, 0))
+end
+
+local TabContentFrame = Instance.new("Frame")
+TabContentFrame.Name = "TabContentFrame"
+TabContentFrame.Size = UDim2.new(1, 0, 1, -80)
+TabContentFrame.Position = UDim2.new(0, 0, 0, 80)
+TabContentFrame.BackgroundColor3 = Color3.fromRGB(50, 150, 150)
+TabContentFrame.BackgroundTransparency = 0.25
+TabContentFrame.Parent = MainFrame
+
+local function createToggleButton(name, position)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 50)
+    frame.Position = position
+    frame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    frame.BorderSizePixel = 0
+    frame.Parent = TabContentFrame
+
+    local label = Instance.new("TextLabel")
+    label.Text = name
+    label.Size = UDim2.new(0.8, 0, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextSize = 18
+    label.Font = Enum.Font.GothamBold
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = frame
+
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Size = UDim2.new(0, 50, 0, 25)
+    toggleButton.Position = UDim2.new(1, -60, 0.5, -12.5)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+    toggleButton.Text = "Off"
+    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleButton.TextSize = 14
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.Parent = frame
+
+    local activated = false
+
+    toggleButton.MouseButton1Click:Connect(function()
+        activated = not activated
+        if activated then
+            toggleButton.Text = "On"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+        else
+            toggleButton.Text = "Off"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+        end
+    end)
+end
+
+local function switchTab(tabIndex)
+    for _, button in ipairs(TabButtonsFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            button.Selected = false
+        end
+    end
+    TabButtons[tabIndex].BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    TabButtons[tabIndex].Selected = true
+
+    for _, content in ipairs(TabContentFrame:GetChildren()) do
+        content:Destroy()
+    end
+
+    for _, toggle in ipairs(customTabs[tabIndex].ToggleOptions) do
+        createToggleButton(toggle[1], toggle[2])
+    end
+end
+
+for i, button in ipairs(TabButtons) do
+    button.MouseButton1Click:Connect(function() switchTab(i) end)
+end
+
+switchTab(1)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+    toggleSound:Play()
+end)
+
+ToggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        ToggleButton.MouseButton1Click()
+    end
+end)
+
+local function drag(element)
+    local dragging = false
+    local dragStart = nil
+    local startPos = nil
+
+    element.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = element.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            element.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+
+drag(MainFrame)
+drag(ToggleButton)
