@@ -1,4 +1,34 @@
---Made By Me--
+local config = {
+	tabs = {
+		{
+			name = "Main",
+			toggles = {
+				{name = "Auto Collect Relics", action = function() print("Auto Collect Relics toggled") end},
+				{name = "Auto Collect Lootbags", action = function() print("Auto Collect Lootbags toggled") end},
+			}
+		},
+		{
+			name = "Automatic",
+			toggles = {
+				{name = "Auto Attack", action = function() print("Auto Attack toggled") end},
+				{name = "Auto Defend", action = function() print("Auto Defend toggled") end},
+			}
+		},
+		{
+			name = "Misc",
+			toggles = {
+				{name = "Enable Chat Logger", action = function() print("Enable Chat Logger toggled") end},
+			}
+		},
+		{
+			name = "Others",
+			toggles = {
+				{name = "Free Camera", action = function() print("Free Camera toggled") end},
+			}
+		},
+	}
+}
+
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -186,7 +216,7 @@ TabContentFrame.Parent = MainFrame
 
 local function createToggleButton(name, action, position)
 	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(1, 0, 0, 55)
+	frame.Size = UDim2.new(1, 0, 0, 50)
 	frame.Position = position
 	frame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 	frame.BorderSizePixel = 0
@@ -235,7 +265,6 @@ for i, toggle in ipairs(config.tabs[1].toggles) do
 	local position = UDim2.new(0, 0, 0, (i - 1) * 60)
 	createToggleButton(toggle.name, toggle.action, position)
 end
-
 local function clearTabContent()
 	for _, child in ipairs(TabContentFrame:GetChildren()) do
 		if child:IsA("Frame") then
